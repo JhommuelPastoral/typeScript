@@ -1,91 +1,78 @@
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 import React, { useState  } from "react"
 import type { UserCredentials } from "../interfaces/Interface"
 import { Link } from "react-router"
-export default function LoginPage() {
+import toast from "react-hot-toast"
+import { login } from "@/lib/api.ts"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { GalleryVerticalEnd, LoaderCircle  } from 'lucide-react';
+
+export default function SignUpPage() {
 
   const [credentials, setCredentials] = useState<UserCredentials> ({
     email: "",
-    password: ""
+    password: "",
   });
+  const queryClient = useQueryClient();
+  const{mutate:loginUser, isPending} = useMutation({
+    mutationFn: login,
+    onSuccess: () => {
+      toast.success("Login Successful");
+      queryClient.invalidateQueries({queryKey: ["authUser"]});
+      setCredentials({email: "", password: ""})
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    }
+  })
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>):void => {
     e.preventDefault()
     if(!credentials.email || !credentials.password) {
-      console.log("Please enter email and password")
+      toast.error("Enter Valid Credentials")
       return 
     }
+    loginUser({email: credentials.email, password: credentials.password})
   }
 
 
   return (
-    <div className="flex items-center justify-center w-screen h-screen border" >
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
-          </CardDescription>
-          <CardAction>
-            <Link to="/signup">
-              <Button variant="link">Sign Up</Button>
-            </Link>
-          </CardAction>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={credentials.email}
-                  onChange={(e) => setCredentials((prev) => ({...prev, email: e.target.value}))}
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="inline-block ml-auto text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
-                <Input id="password" 
-                  type="password" 
-                  required
-                  onChange={(e) => setCredentials((prev) => ({...prev, password: e.target.value}))}
-                  value={credentials.password}
-                />
-                <Button type="submit" className="w-full">
-                  Login
-                </Button>
-              </div>
-            </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex-col ">
-          <Button variant="secondary" className="w-full" >
-            Login with Google
-          </Button>
-        </CardFooter>
-      </Card>
+    <div className="flex items-center justify-center w-screen h-screen " >
+      <div className="w-full max-w-md space-y-5 font-Rubik">
+        {/* Header */}
+        <div className="flex flex-col items-center justify-center gap-2 ">
+          <GalleryVerticalEnd className="" />
+          <h4 className="text-lg font-semibold tracking-tight">
+            Welcome to Acme Inc.
+          </h4>
+          <div className="flex items-center gap-2 ">
+            <p className="text-sm ">Do&apos;nt have an account yet?  </p>
+            <Link to="/signup" className="text-sm underline underline-offset-4">Sign Up</Link> 
+          </div>
+        </div>
+        <form action="" className="space-y-5" onSubmit={handleSubmit} >
+          {/* Email */}
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input type="email" id="email" required placeholder="Email" value={credentials.email} onChange={(e) => setCredentials((prev)=> ({...prev, email: e.target.value}))}/>
+          </div>
+          {/* Password */}
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="password">Password</Label>
+            <Input type="password" id="password" required placeholder="Password" value={credentials.password} onChange={(e) => setCredentials((prev)=> ({...prev, password: e.target.value}))}  />
+          </div>
+          <Button className="w-full cursor-pointer" type="submit" disabled={isPending}>{isPending ? <div className="flex items-center gap-2">  <LoaderCircle className="animate-spin" /> Logging in ... </div> :'Login' }</Button>
+        </form> 
+        <div className="flex items-center gap-4">
+          <Separator className="flex-1" />
+          <span className="text-sm text-muted-foreground">or</span>
+          <Separator className="flex-1" />
+        </div> 
+        <Button variant="outline" className="flex w-full gap-2 cursor-pointer">  Continue with Google</Button>
+      </div>
     </div>
   )
 }

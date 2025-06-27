@@ -7,8 +7,8 @@ import type { CreateUserCredentials } from "../interfaces/Interface"
 import { Link } from "react-router"
 import toast from "react-hot-toast"
 import { signUp } from "@/lib/api.ts"
-import { useMutation } from "@tanstack/react-query"
-import { GalleryVerticalEnd } from 'lucide-react';
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { GalleryVerticalEnd, LoaderCircle  } from 'lucide-react';
 
 export default function SignUpPage() {
 
@@ -17,9 +17,18 @@ export default function SignUpPage() {
     password: "",
     confirmPassword: ""
   });
+  const queryClient = useQueryClient();
 
-  const{mutate:signUpUser} = useMutation({
+  const{mutate:signUpUser, isPending} = useMutation({
     mutationFn: signUp,
+    onSuccess: () => {
+      toast.success("Account Created Successfully");
+      queryClient.invalidateQueries({queryKey: ["authUser"]});
+      setCredentials({email: "", password: "", confirmPassword: ""})
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    }
   })
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>):void => {
@@ -50,7 +59,7 @@ export default function SignUpPage() {
             <Link to="/login" className="text-sm underline underline-offset-4">Log In</Link> 
           </div>
         </div>
-        <form action="" className="space-y-5">
+        <form action="" className="space-y-5" onSubmit={handleSubmit}>
           {/* Email */}
           <div className="flex flex-col gap-2">
             <Label htmlFor="email">Email</Label>
@@ -66,14 +75,14 @@ export default function SignUpPage() {
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input type="password" id="confirmPassword" required placeholder="Confirm Password" onChange={(e) => setCredentials({...credentials, confirmPassword: e.target.value})} />
           </div>
-          <Button className="w-full">Create Your Account</Button>
+          <Button className="w-full cursor-pointer" type="submit" disabled={isPending}>{isPending ? <div className="flex items-center gap-2">  <LoaderCircle className="animate-spin" /> Creating Account... </div> :'Create Account' }</Button>
         </form> 
         <div className="flex items-center gap-4">
           <Separator className="flex-1" />
           <span className="text-sm text-muted-foreground">or</span>
           <Separator className="flex-1" />
         </div> 
-        <Button variant="outline" className="flex w-full gap-2">  Continue with Google</Button>
+        <Button variant="outline" className="flex w-full gap-2 cursor-pointer">Continue with Google</Button>
       </div>
     </div>
   )
