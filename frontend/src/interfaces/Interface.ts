@@ -8,3 +8,10 @@ export interface CreateUserCredentials {
   password: string;
   confirmPassword: string;
 }
+
+export interface validatorError {
+  email: boolean;
+  password: boolean;
+  confirmPassword: boolean;
+}
+

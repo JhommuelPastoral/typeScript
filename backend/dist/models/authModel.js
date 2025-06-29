@@ -13,6 +13,10 @@ const authSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
+    isOnboarded: {
+        type: Boolean,
+        default: false
+    }
 }, { timestamps: true });
 const User = mongoose_1.default.model("User", authSchema);
 exports.default = User;

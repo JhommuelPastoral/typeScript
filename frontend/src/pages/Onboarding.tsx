@@ -1,23 +1,19 @@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import React, { useState  } from "react"
 import type { CreateUserCredentials, validatorError } from "../interfaces/Interface"
 import { Link } from "react-router"
 import toast from "react-hot-toast"
-import { signUp, googleLogin } from "@/lib/api.ts"
+import { createGoogleUser, logOut } from "@/lib/api.ts"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { LoaderCircle  } from 'lucide-react';
-import { FcGoogle } from "react-icons/fc";
 import { SiThealgorithms } from "react-icons/si";
 import validator from 'validator';
-import {auth, signInWithPopup, provider} from '../../firebase/firebase.config.ts'
+import useAuthUser from "@/lib/useAuthUser"
 
-
-
-export default function SignUpPage() {
-
+export default function Onbaording() {
+  const {authData} = useAuthUser();
   const [credentials, setCredentials] = useState<CreateUserCredentials> ({
     email: "",
     password: "",
@@ -32,8 +28,8 @@ export default function SignUpPage() {
 
   const queryClient = useQueryClient();
 
-  const{mutate:signUpUser, isPending} = useMutation({
-    mutationFn: signUp,
+  const{mutate:createGoogleUserData, isPending} = useMutation({
+    mutationFn: createGoogleUser,
     onSuccess: () => {
       toast.success("Account Created Successfully");
       queryClient.invalidateQueries({queryKey: ["authUser"]});
@@ -44,19 +40,17 @@ export default function SignUpPage() {
     }
   })
 
-  const handlleOnchangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCredentials((prev)=>({...prev, email: e.target.value}));
-    if(!validator.isEmail(e.target.value)) {
-      if(e.target.value == "") {
-        setValidatorError((prev)=>({...prev, email: false}))
-      }
-      else{
-        setValidatorError((prev)=>({...prev, email: true}))
-      }
-    } else {
-      setValidatorError((prev)=>({...prev, email: false}))
+  const {mutate:logOutUser} = useMutation({
+    mutationFn: logOut,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ["authUser"]});
+    },
+    onError: (error) => {
+      toast.error(error.message)
     }
-  }
+  })
+
+
 
   const handleOnchangePassword = (e: React.ChangeEvent<HTMLInputElement> ) => {
     setCredentials((prev)=>({...prev, password: e.target.value}));
@@ -88,7 +82,7 @@ export default function SignUpPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>):void => {
     e.preventDefault()
-    if(!credentials.email || !credentials.password || !credentials.confirmPassword) {
+    if(!credentials.password || !credentials.confirmPassword) {
       toast.error("Enter Valid Credentials")
       return 
     }
@@ -96,28 +90,13 @@ export default function SignUpPage() {
       toast.error("Password do not match")
       return 
     }
-    signUpUser({email: credentials.email, password: credentials.password})
+    createGoogleUserData({password: credentials.password})
   }
 
-  const {mutate:googleLoginUser, isPending:isPendingGoogle} = useMutation({
-    mutationFn: googleLogin,
-    onSuccess: () => {
-      toast.success("Account Created Successfully");
-      queryClient.invalidateQueries({queryKey: ["authUser"]});
-      setCredentials({email: "", password: "", confirmPassword: ""})
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    }
-  })
 
-  const handleGoogleLogin = async () => {
-    const result = await signInWithPopup(auth, provider);
-    const email = result.user.email;
-    if(email){
-      googleLoginUser({email});
-    }
-  };
+  const handleRemoveCookie = () => {
+    logOutUser();
+  }
 
 
   return (
@@ -127,18 +106,18 @@ export default function SignUpPage() {
         <div className="flex flex-col items-center justify-center gap-2 ">
           <SiThealgorithms size={50} color="red" />
           <h4 className="text-lg font-semibold tracking-tight">
-            Create an account 
+            Finish setting up your account
           </h4>
           <div className="flex items-center gap-2 ">
             <p className="text-sm ">Already have an account ?  </p>
-            <Link to="/login" className="text-sm underline underline-offset-4">Log In</Link> 
+            <Link to="/login" className="text-sm underline underline-offset-4" onClick={handleRemoveCookie}>Log In</Link> 
           </div>
         </div>
         <form action="" className="space-y-5" onSubmit={handleSubmit}>
           {/* Email */}
           <div className="flex flex-col gap-2">
             <Label htmlFor="email">Email</Label>
-            <Input type="email" id="email" required placeholder="Email" onChange={handlleOnchangeEmail} />
+            <Input type="email" id="email"  placeholder="Email" disabled value={authData?.user?.email}  />
             <small className={`text-sm text-[rgb(207,10,10)] ${validatorError.email ? "block " : "hidden "}`}> Invalid Email Address</small>
           </div>
           {/* Password */}
@@ -152,15 +131,10 @@ export default function SignUpPage() {
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input type="password" id="confirmPassword" required placeholder="Confirm Password" onChange={handleOnchangeConfirmPassword} />
             <small className={`text-sm text-[rgb(207,10,10)]  ${validatorError.confirmPassword ? "block " : "hidden "}`}> Password do not match</small>
-          </div>s
-          <Button className="w-full cursor-pointer" type="submit" disabled={isPending || isPendingGoogle}>{isPending || isPendingGoogle ? <div className="flex items-center gap-2">  <LoaderCircle className="animate-spin" /> Creating Account... </div> :'Create Account' }</Button>
+          </div>
+          <Button className="w-full cursor-pointer" type="submit" disabled={isPending}>{isPending ? <div className="flex items-center gap-2">  <LoaderCircle className="animate-spin" /> Creating Account... </div> :'Create Account' }</Button>
         </form> 
-        <div className="flex items-center gap-4">
-          <Separator className="flex-1" />
-          <span className="text-sm text-muted-foreground">or</span>
-          <Separator className="flex-1" />
-        </div> 
-        <Button variant="outline" className="flex items-center w-full gap-2 cursor-pointer" disabled={isPendingGoogle || isPending} onClick={handleGoogleLogin}> <FcGoogle/> Continue with Google</Button>
+
       </div>
     </div>
   )

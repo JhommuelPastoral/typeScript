@@ -1,9 +1,5 @@
 import mongoose from "mongoose";
-
-interface IAuth extends mongoose.Document {
-  email: string;
-  password: string;
-}
+import { IAuth } from "../interfaces/auth.interface";
 
 const authSchema: mongoose.Schema<IAuth> = new mongoose.Schema({
   email: {
@@ -14,7 +10,11 @@ const authSchema: mongoose.Schema<IAuth> = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isOnboarded: {
+    type: Boolean,
+    default: false
+  }
 }, {timestamps: true});
 
-const User = mongoose.model("User", authSchema);
+const User = mongoose.model<IAuth>("User", authSchema);
 export default User
