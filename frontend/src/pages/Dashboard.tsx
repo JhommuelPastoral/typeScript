@@ -14,7 +14,7 @@ export default function Dashboard() {
 
   return (
     <div>
-
+      Hello World
       <Button onClick={()=>{logOutUser()}}>Log Out</Button>
     </div>
   )
