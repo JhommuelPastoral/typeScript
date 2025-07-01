@@ -11,10 +11,13 @@ export default function Dashboard() {
       queryClient.invalidateQueries({queryKey: ["authUser"]});
     },
   });
+  // const handleOnChange = (e: React.KeyboardEvent<HTMLInputElement>) =>{
 
+  // }
   return (
     <div>
       Hello World
+      {/* <input type="text" onKeyDown={handleOnChange} /> */}
       <Button onClick={()=>{logOutUser()}}>Log Out</Button>
     </div>
   )

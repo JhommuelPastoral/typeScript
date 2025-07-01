@@ -21,7 +21,7 @@ function dbConnect() {
             console.log("Database connection successful", conn.connection.host);
         }
         catch (error) {
-            console.log("Database connection failed");
+            console.log("Database connection failed:", error);
         }
     });
 }
