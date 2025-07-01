@@ -37,7 +37,7 @@ export const register = async(req: Request, res: Response):Promise<void>=> {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      maxAge: 60 * 60 * 24 * 7
+      maxAge: 60 * 60 * 24 * 7 * 1000
     });
      res.status(201).json({message: "User created successfully"});
 
@@ -69,7 +69,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      maxAge: 60 * 60 * 24 * 7
+      maxAge: 60 * 60 * 24 * 7 * 1000
     });
     res.status(201).json({message: "Login successful"});
   } catch (error) {
@@ -112,7 +112,7 @@ export const googleLogin = async (req: Request, res: Response): Promise<void> =>
          httpOnly: true,
          secure: true,
          sameSite: "none",
-         maxAge: 60 * 60 * 24 * 7
+         maxAge: 60 * 60 * 24 * 7 * 1000
        })
        res.status(201).json({message: "Login successful"});
        return;
@@ -123,7 +123,7 @@ export const googleLogin = async (req: Request, res: Response): Promise<void> =>
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        maxAge: 60 * 60 * 24 * 7
+        maxAge: 60 * 60 * 24 * 7 * 1000
       })
     res.status(201).json({message: "User created successfully"});
   } catch (error) {

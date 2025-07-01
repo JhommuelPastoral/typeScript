@@ -39,7 +39,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            maxAge: 60 * 60 * 24 * 7
+            maxAge: 60 * 60 * 24 * 7 * 1000
         });
         res.status(201).json({ message: "User created successfully" });
     }
@@ -70,7 +70,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            maxAge: 60 * 60 * 24 * 7
+            maxAge: 60 * 60 * 24 * 7 * 1000
         });
         res.status(201).json({ message: "Login successful" });
     }
@@ -115,7 +115,7 @@ const googleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 httpOnly: true,
                 secure: true,
                 sameSite: "none",
-                maxAge: 60 * 60 * 24 * 7
+                maxAge: 60 * 60 * 24 * 7 * 1000
             });
             res.status(201).json({ message: "Login successful" });
             return;
@@ -126,7 +126,7 @@ const googleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            maxAge: 60 * 60 * 24 * 7
+            maxAge: 60 * 60 * 24 * 7 * 1000
         });
         res.status(201).json({ message: "User created successfully" });
     }

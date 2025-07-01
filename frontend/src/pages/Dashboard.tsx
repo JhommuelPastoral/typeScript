@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import toast from "react-hot-toast"
 export default function Dashboard() {
   const queryClient = useQueryClient();
-  const{mutate:logOutUser, isPending} = useMutation({
+  const{mutate:logOutUser} = useMutation({
     mutationFn: logOut,
     onSuccess: () => {
       toast.success("Logout Successful");
