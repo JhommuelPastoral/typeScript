@@ -152,7 +152,7 @@ export default function SignUpPage() {
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input type="password" id="confirmPassword" required placeholder="Confirm Password" onChange={handleOnchangeConfirmPassword} />
             <small className={`text-sm text-[rgb(207,10,10)]  ${validatorError.confirmPassword ? "block " : "hidden "}`}> Password do not match</small>
-          </div>s
+          </div>
           <Button className="w-full cursor-pointer" type="submit" disabled={isPending || isPendingGoogle}>{isPending || isPendingGoogle ? <div className="flex items-center gap-2">  <LoaderCircle className="animate-spin" /> Creating Account... </div> :'Create Account' }</Button>
         </form> 
         <div className="flex items-center gap-4">

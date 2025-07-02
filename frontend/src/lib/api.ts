@@ -1,6 +1,7 @@
 import axiosInstance from "./axios.ts";
 import axios from "axios";
-export const signUp = async (data : {email: string, password: string}) : Promise<any>=>{
+
+export const signUp = async (data : {email: string, password: string}) : Promise<{message: string} | undefined>=>{
   try {
     const res = await axiosInstance.post("/auth/signup", data);
     return res.data;
@@ -22,10 +23,7 @@ export const login = async (data : {email: string, password: string}) : Promise<
   }
 }
 
-
-
-
-export const myProfile = async () : Promise<any>=>{
+export const myProfile = async () : Promise<{user: {email: string, isOnboarded: boolean, _id: string}} | null>=>{
   try {
     const res = await axiosInstance.get("/auth/user");
     return res.data;
@@ -34,16 +32,16 @@ export const myProfile = async () : Promise<any>=>{
   }
 }
 
-export const logOut = async () : Promise<any>=>{
+export const logOut = async () : Promise<{message: string} |  null>=>{
   try {
     const res = await axiosInstance.post("/auth/logout");
     return res.data;
   } catch (error) {
-    return null;
+    return null
   }
 }
 
-export const googleLogin = async (data: {email: string}) : Promise<any>=>{
+export const googleLogin = async (data: {email: string}) : Promise<{message: string} | undefined>=>{
   try {
     const res = await axiosInstance.post("/auth/google", data);
     return res.data;
@@ -54,7 +52,7 @@ export const googleLogin = async (data: {email: string}) : Promise<any>=>{
   }
 }
 
-export const createGoogleUser = async (data: {password: string}) : Promise<any>=>{
+export const createGoogleUser = async (data: {password: string}) : Promise<{message: string} | undefined>=>{
   try {
     const res = await axiosInstance.post("/auth/createGoogleUser", data);
     return res.data;

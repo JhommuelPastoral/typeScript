@@ -7,6 +7,7 @@ import useAuthUser from "./lib/useAuthUser.ts"
 import Onbaording from "./pages/Onboarding.tsx"
 import { Toaster } from 'react-hot-toast';
 import Layout from "./components/Layout.tsx"
+import AlgorithmPage from "./pages/AlgorithmPage.tsx"
 
 export default function App() {
 
@@ -21,8 +22,9 @@ export default function App() {
         <Route path="/" element={isAuthenticated ? isOnboarded ? <Navigate to="/dashboard" /> : <Navigate to="/onboarding" /> : <LandingPage />} />
         <Route path="/login" element={isAuthenticated ? isOnboarded ? <Navigate to="/dashboard" /> : <Navigate to="/onboarding" /> : <LoginPage />} />
         <Route path="/signup" element={isAuthenticated ? isOnboarded ? <Navigate to="/dashboard" /> : <Navigate to="/onboarding" /> : <SignUpPage />} />
-        <Route path="/dashboard" element={isAuthenticated ? (isOnboarded ?  <Layout>  <Dashboard />  </Layout> : <Navigate to="/onboarding" /> ): <Navigate to="/login" />} />
         <Route path="/onboarding" element={ isAuthenticated ? (isOnboarded ? <Navigate to="/dashboard" /> : <Onbaording /> ): <Navigate to="/login" /> } />
+        <Route path="/dashboard" element={isAuthenticated ? (isOnboarded ?  <Layout>  <Dashboard />  </Layout> : <Navigate to="/onboarding" /> ): <Navigate to="/login" />} />
+        <Route path="/algorithms" element={ isAuthenticated ? (isOnboarded ? <Layout>  <AlgorithmPage />  </Layout> : <Navigate to="/onboarding" /> ): <Navigate to="/login" /> } />
       </Routes>
     
     </>

@@ -1,5 +1,5 @@
 import { Home, Settings, LogOut, Plus,Network, TestTubeDiagonal,Brain,ChartColumn ,StickyNote, UserRound, Copyright  } from "lucide-react"
-import { useLocation } from "react-router"
+import { useLocation, Link } from "react-router"
 import {
   Sidebar,
   SidebarContent,
@@ -33,7 +33,7 @@ const items = [
   },
   {
     title: "Algorithms",
-    url: "#",
+    url: "/algorithms",
     icon: SiAlgorand,
   },
   {
@@ -102,14 +102,14 @@ export default function AppSidebar() {
                 <SidebarMenuItem key={item.title} className="flex flex-col items-center">
                     <SidebarMenuButton asChild isActive={currentPath === item.url}>
                       {state === 'expanded' ? (
-                        <a href={item.url}>
+                        <Link to={item.url}>
                           <item.icon />
                           <span>{item.title}</span>
-                        </a>
+                        </Link>
                       ):(
                         <Tooltip >
                           <TooltipTrigger asChild>
-                            <a>
+                            <a href={item.url}>
                               <item.icon size={20} />
                             </a>
                           </TooltipTrigger>
@@ -132,16 +132,16 @@ export default function AppSidebar() {
               <SidebarMenuItem className={`flex flex-col items-center ${state === 'expanded' ? 'gap-2' : 'gap-4'}`}>
                 <SidebarMenuButton asChild isActive={currentPath === '/setting'}>
                   {state === 'expanded' ? (
-                    <a href={'#'}>
+                    <Link to={'#'}>
                       <Settings />
                       <span>Settings</span>
-                    </a>
+                    </Link>
                   ):(
                     <Tooltip >
                       <TooltipTrigger asChild>
-                        <a>
+                        <Link to={'#'}>
                           <Settings size={20} />
-                        </a>
+                        </Link>
                       </TooltipTrigger>
                       <TooltipContent side="right">Settings</TooltipContent>
                     </Tooltip>
