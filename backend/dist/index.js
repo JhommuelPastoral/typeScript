@@ -11,7 +11,7 @@ const db_1 = __importDefault(require("./config/db"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 const app = (0, express_1.default)();
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: 'https://typescript-1-3p3d.onrender.com',
     credentials: true
 };
 dotenv_1.default.config();

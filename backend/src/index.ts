@@ -8,7 +8,7 @@ import authRoutes from './routes/auth.routes'
 
 const app = express();
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: 'https://typescript-1-3p3d.onrender.com',
   credentials: true
 }
 
