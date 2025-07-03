@@ -1,4 +1,6 @@
-import BubbleSort from "@/sortingComponents/BubbleSort"
+import BubbleSort from "@/sortingComponents/bubble/BubbleSort"
+import SelectionSort from "@/sortingComponents/selection/SelectionSort"
+import InsertionSort from "@/sortingComponents/insertion/InsertionSort"
 export default function AlgorithmPage() {
   return (
     <>
@@ -8,8 +10,10 @@ export default function AlgorithmPage() {
         </h4>
       </header>
 
-      <main className="w-full p-2 lg:p-5 font-Rubik">
+      <main className="w-full p-2 space-y-5 lg:p-5 font-Rubik">
         <BubbleSort/>
+        <SelectionSort/>
+        <InsertionSort/>
       </main>
 
     </>
