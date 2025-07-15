@@ -1,5 +1,5 @@
 import { Home, Settings, LogOut, Plus,Network, TestTubeDiagonal,Brain,ChartColumn ,StickyNote, UserRound, Copyright  } from "lucide-react"
-import { useLocation, Link } from "react-router"
+import { useLocation, NavLink } from "react-router"
 import {
   Sidebar,
   SidebarContent,
@@ -102,16 +102,16 @@ export default function AppSidebar() {
                 <SidebarMenuItem key={item.title} className="flex flex-col items-center">
                     <SidebarMenuButton asChild isActive={currentPath === item.url}>
                       {state === 'expanded' ? (
-                        <Link to={item.url}>
+                        <NavLink to={item.url}>
                           <item.icon />
                           <span>{item.title}</span>
-                        </Link>
+                        </NavLink>
                       ):(
                         <Tooltip >
                           <TooltipTrigger asChild>
-                            <a href={item.url}>
+                            <NavLink to={item.url}>
                               <item.icon size={20} />
-                            </a>
+                            </NavLink>
                           </TooltipTrigger>
                           <TooltipContent side="right"  >{item.title}</TooltipContent>
                         </Tooltip>
@@ -132,16 +132,16 @@ export default function AppSidebar() {
               <SidebarMenuItem className={`flex flex-col items-center ${state === 'expanded' ? 'gap-2' : 'gap-4'}`}>
                 <SidebarMenuButton asChild isActive={currentPath === '/setting'}>
                   {state === 'expanded' ? (
-                    <Link to={'#'}>
+                    <NavLink to={'#'}>
                       <Settings />
                       <span>Settings</span>
-                    </Link>
+                    </NavLink>
                   ):(
                     <Tooltip >
                       <TooltipTrigger asChild>
-                        <Link to={'#'}>
+                        <NavLink to={'#'}>
                           <Settings size={20} />
-                        </Link>
+                        </NavLink>
                       </TooltipTrigger>
                       <TooltipContent side="right">Settings</TooltipContent>
                     </Tooltip>

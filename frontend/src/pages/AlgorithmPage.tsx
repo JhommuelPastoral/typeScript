@@ -2,6 +2,7 @@ import BubbleSort from "@/sortingComponents/bubble/BubbleSort"
 import SelectionSort from "@/sortingComponents/selection/SelectionSort"
 import InsertionSort from "@/sortingComponents/insertion/InsertionSort"
 import MergeSort from "@/sortingComponents/merge/MergeSort"
+import QuickSort from "@/sortingComponents/quicksort/QuickSort"
 export default function AlgorithmPage() {
   return (
     <>
@@ -16,6 +17,7 @@ export default function AlgorithmPage() {
         <SelectionSort/>
         <InsertionSort/>
         <MergeSort/>
+        <QuickSort/>
       </main>
 
     </>
